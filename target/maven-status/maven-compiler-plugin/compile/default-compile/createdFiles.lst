@@ -1,0 +1,13 @@
+net\vivekkumar\spring\controller\UsersController.class
+net\vivekkumar\spring\controller\AuthorisedUsersController.class
+net\vivekkumar\spring\serviceimpl\UsersServiceImpl.class
+net\vivekkumar\spring\config\AppConfig.class
+net\vivekkumar\spring\repositories\AuthorizedUserRepository.class
+net\vivekkumar\spring\model\User.class
+net\vivekkumar\spring\serviceimpl\AuthorizeUserServiceImpl.class
+net\vivekkumar\spring\service\AuthorizeUserService.class
+net\vivekkumar\spring\service\UsersService.class
+net\vivekkumar\spring\repositories\UserRepository.class
+net\vivekkumar\spring\config\AppInitializer.class
+net\vivekkumar\spring\model\ErrorMsg.class
+net\vivekkumar\spring\model\AuthorisedUser.class
