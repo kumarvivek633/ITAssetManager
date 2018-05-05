@@ -8,5 +8,7 @@ import net.vivekkumar.spring.model.User;
 public interface AuthorizedUserRepository extends JpaRepository<AuthorisedUser, String>{
 	
 	public AuthorisedUser findByEmailAndPassword(String email, String password);
+	
+	public AuthorisedUser findByEmail(String email);
 
 }

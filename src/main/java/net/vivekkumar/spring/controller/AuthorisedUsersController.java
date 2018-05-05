@@ -1,15 +1,11 @@
 package net.vivekkumar.spring.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,15 +43,40 @@ public class AuthorisedUsersController {
 	@PostMapping("/Register_User")
 	public AuthorisedUser registerUser(@RequestBody AuthorisedUser authorisedUser) {
 		if (authorisedUser != null) {
-			User user = usersServiceImpl.findUser(authorisedUser.getEmail());
-			if (user != null) {
-				authorisedUser.setUser(user);
-				authorisedUser.setHasError(false);
-				authorisedUser = authorizeUserServiceImpl.registerUser(authorisedUser);
-				LOG.info("User {} registered", authorisedUser.getEmail());
-			} else {
+			AuthorisedUser authorisedUser2 = authorizeUserServiceImpl.checkRegistered(authorisedUser.getEmail());
+			if(authorisedUser2 != null){
+				authorisedUser = authorisedUser2;
+				if(authorisedUser.getActivated()){
+					authorisedUser.setHasError(true);
+					authorisedUser.setError("You are already registered user. Please go to Login page to login!");
+				}
+			}else{
+				User user = usersServiceImpl.findUser(authorisedUser.getEmail());
+				if (user != null) {
+					authorisedUser.setUser(user);
+					authorisedUser.setHasError(false);
+					authorisedUser = authorizeUserServiceImpl.registerUser(authorisedUser);
+					LOG.info("User {} registered", authorisedUser.getEmail());
+				} else {
+					authorisedUser.setHasError(true);
+					authorisedUser.setError("You are not a Xpanxion Employee.");
+				}
+			}
+		}
+		return authorisedUser;
+
+	}
+	
+	@PutMapping("/Activate_User")
+	public AuthorisedUser activateUser(@RequestBody AuthorisedUser authorisedUser) {
+		if (authorisedUser != null) {
+			int otp = authorisedUser.getOtp().intValue();
+			authorisedUser = authorizeUserServiceImpl.checkRegistered(authorisedUser.getEmail());
+			if(authorisedUser != null && otp == authorisedUser.getOtp().intValue()){
+				authorisedUser = authorizeUserServiceImpl.activateUser(authorisedUser);
+			}else{
 				authorisedUser.setHasError(true);
-				authorisedUser.setError("You are not a Xpanxion Emplooyeee.");
+				authorisedUser.setError("Otp Incorrect!");
 			}
 		}
 		return authorisedUser;

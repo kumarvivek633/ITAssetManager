@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "AUTHORISED_USERS")
 public class AuthorisedUser extends ErrorMsg{
@@ -21,6 +23,12 @@ public class AuthorisedUser extends ErrorMsg{
 	private String email;
 	@Column(name = "password")
 	private String password;
+	@Column(name = "activated")
+	private boolean activated;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Column(name = "otp")
+	private Long otp;
+	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
 	private User user;
@@ -48,5 +56,23 @@ public class AuthorisedUser extends ErrorMsg{
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public boolean getActivated() {
+		return activated;
+	}
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	public Long getOtp() {
+		return otp;
+	}
+
+	public void setOtp(Long otp) {
+		this.otp = otp;
+	}
+	
+	
 
 }

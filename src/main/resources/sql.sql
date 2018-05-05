@@ -18,6 +18,8 @@ CREATE TABLE IT_MAN.Authorised_Users
   email varchar2(50) NOT NULL,
   password varchar2(50) NOT NULL,
   emp_id number(10) NOT NULL,
+  otp number(10),
+  activated CHAR(2) default 'N',
    CONSTRAINT Authorised_Users_pk PRIMARY KEY (email),
     CONSTRAINT Authorised_Users_fk
     FOREIGN KEY (emp_id)
@@ -44,3 +46,13 @@ ASSET_ID varchar2(50) NOT NULL,
     RETURNED_ON date,
   CONSTRAINT ASSET_aLLOCATION_PK PRIMARY KEY (ID)
 );
+
+
+
+
+CREATE SEQUENCE IT_MAN.seq_ASSET_aLLOCATION
+  MINVALUE 1
+  MAXVALUE 999999999999999999999999999
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;
