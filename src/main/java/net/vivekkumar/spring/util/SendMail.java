@@ -45,12 +45,12 @@ public class SendMail{
 		props.put("mail.smtp.port", "587");
 		Session session = Session.getInstance(props, new javax.mail.Authenticator(){
 			protected PasswordAuthentication getPasswordAuthentication(){
-				return new PasswordAuthentication("test","test");
+				return new PasswordAuthentication("kumarviv353@gmail.com","testapp@123");
 			}
 		});
 		try{
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("tes"));
+			message.setFrom(new InternetAddress("kumarviv353@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
 			message.setSubject(sub);
 			message.setText(msg);

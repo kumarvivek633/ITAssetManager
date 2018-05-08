@@ -24,9 +24,7 @@ import org.hibernate.annotations.Cascade;
 @Table(name = "ASSET_aLLOCATION")
 public class Asset extends ErrorMsg {
 
-	@Id
-	@GeneratedValue(generator = "seqAsset")
-	@SequenceGenerator(name = "seqAsset", sequenceName = "SEQ_ASSET_ALLOCATION", allocationSize = 5)
+	@Id @GeneratedValue
 	long id;
 
 	@Column(name = "ASSET_ID")
