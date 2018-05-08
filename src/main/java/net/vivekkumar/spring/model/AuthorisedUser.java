@@ -19,18 +19,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "AUTHORISED_USERS")
 public class AuthorisedUser extends ErrorMsg{
 	@Id
-	@Column(name = "email")
+	@Column(name = "EMAIL")
 	private String email;
-	@Column(name = "password")
+	@Column(name = "PASSWORD")
 	private String password;
-	@Column(name = "activated")
+	@Column(name = "ACTIVATED")
 	private boolean activated;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	@Column(name = "otp")
+	@Column(name = "OTP")
 	private Long otp;
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
+	@JoinColumn(name = "EMP_ID", referencedColumnName = "emp_id")
 	private User user;
 
 	public String getEmail() {

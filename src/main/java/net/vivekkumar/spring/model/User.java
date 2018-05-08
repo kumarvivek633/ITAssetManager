@@ -14,18 +14,18 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "USERS")
 public class User extends ErrorMsg{
 	@Id
-	@Column(name = "emp_id")
+	@Column(name = "EMP_ID")
 	private Long empId;
-	@Column(name = "first_name")
+	@Column(name = "FIRST_NAME")
 	private String firstName;
-	@Column(name = "last_name")
+	@Column(name = "LAST_NAME")
 	private String lastName;
-	@Column(name = "email", unique = true)
+	@Column(name = "EMAIL", unique = true)
 	private String email;
-	@Column(name = "creation_date")
+	@Column(name = "CREATION_DATE")
 	private Date creationDate;
 	
 	@OneToMany(mappedBy="user", cascade= CascadeType.ALL,fetch = FetchType.EAGER)

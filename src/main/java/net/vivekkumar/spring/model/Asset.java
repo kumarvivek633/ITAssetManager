@@ -21,7 +21,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 
 @Entity
-@Table(name = "ASSET_aLLOCATION")
+@Table(name = "ASSET_ALLOCATION")
 public class Asset extends ErrorMsg {
 
 	@Id @GeneratedValue
@@ -40,7 +40,7 @@ public class Asset extends ErrorMsg {
 	private Date returnedOn;
 
 	@ManyToOne
-	@JoinColumn(name = "emp_id", nullable = false)
+	@JoinColumn(name = "EMP_ID", nullable = false)
 	private User user;
 
 	@Transient
