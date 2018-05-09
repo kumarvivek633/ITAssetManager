@@ -20,8 +20,12 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "ASSET_ALLOCATION")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Asset extends ErrorMsg {
 
 	@Id @GeneratedValue
