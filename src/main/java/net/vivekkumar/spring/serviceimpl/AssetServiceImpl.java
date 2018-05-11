@@ -40,5 +40,9 @@ public class AssetServiceImpl implements AssetService {
 	public Asset findByAssedIdAndReturnedOnNull(String assetId){
 		return assetRepository.findByAssetIdAndReturnedOnNull(assetId);
 	}
+	
+	public List<Asset> fetchAssets(){
+		return assetRepository.findAll();
+	}
 
 }

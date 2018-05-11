@@ -1,6 +1,8 @@
 package net.vivekkumar.spring.controller;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jxl.write.WriteException;
 import net.vivekkumar.spring.model.Asset;
 import net.vivekkumar.spring.model.User;
 import net.vivekkumar.spring.service.AssetService;
+import net.vivekkumar.spring.service.CreateReportService;
 import net.vivekkumar.spring.service.UsersService;
+import net.vivekkumar.spring.util.SendMail;
 
 @RestController
 public class AssetController {
@@ -25,6 +30,9 @@ public class AssetController {
 
 	@Autowired
 	private AssetService assetServiceImpl;
+	
+@Autowired
+private CreateReportService createReportService;
 
 	/*
 	 * @GetMapping("/login") public AuthorisedUser
@@ -80,6 +88,22 @@ public class AssetController {
 			}
 		return asset;
 
+	}
+	
+	@PutMapping("/generateExcelReport")
+	public boolean generateExcelReport() throws WriteException, IOException {
+				//List<Asset> assets = assetServiceImpl.fetchAssets();
+				boolean hasError = false;
+				//if(assets != null && !assets.isEmpty()){
+					//assets = assetServiceImpl.saveAsset(asset);
+					createReportService.write();
+					SendMail.sendMail("kumarvivek633@gmail.com", "test", "sub");
+					LOG.info("Report Sent");
+					
+				//}else{
+					hasError = true;
+				//}
+		return hasError;
 	}
 
 }
