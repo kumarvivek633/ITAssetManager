@@ -1,26 +1,55 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.model;
 
+/**
+ * The Class ErrorMsg.
+ */
 public class ErrorMsg {
 
-	private String error;
-	
-	private boolean hasError = false;
+    /** The error. */
+    private String error;
 
-	public String getError() {
-		return error;
-	}
+    /** The has error. */
+    private boolean hasError = false;
 
-	public void setError(String error) {
-		this.error = error;
-	}
+    /**
+     * Gets the error.
+     *
+     * @return the error
+     */
+    public String getError() {
+        return error;
+    }
 
-	public boolean getHasError() {
-		return hasError;
-	}
+    /**
+     * Gets the checks for error.
+     *
+     * @return the checks for error
+     */
+    public boolean getHasError() {
+        return hasError;
+    }
 
-	public void setHasError(boolean hasError) {
-		this.hasError = hasError;
-	}
-	
-	
+    /**
+     * Sets the error.
+     *
+     * @param error
+     *            the new error
+     */
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    /**
+     * Sets the checks for error.
+     *
+     * @param hasError
+     *            the new checks for error
+     */
+    public void setHasError(boolean hasError) {
+        this.hasError = hasError;
+    }
+
 }

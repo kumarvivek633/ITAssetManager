@@ -1,11 +1,14 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.serviceimpl;
 
-import net.vivekkumar.spring.service.CreateReportService;
-
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,8 @@ import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.UnderlineStyle;
-import jxl.write.Formula;
+import jxl.write.DateFormat;
+import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableCellFormat;
@@ -22,102 +26,208 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import net.vivekkumar.spring.model.Asset;
+import net.vivekkumar.spring.service.CreateReportService;
 
+/**
+ * The Class CreateReportServiceImpl.
+ */
 @Service
 public class CreateReportServiceImpl implements CreateReportService {
 
-	private WritableCellFormat timesBoldUnderline;
-	private WritableCellFormat times;
+    /** The Constant DATE_CELL_FRMT. */
+    public static final WritableCellFormat DATE_CELL_FRMT;
+    static {
+        DateFormat df = new DateFormat("dd/MM/yyyy");
+        df.getDateFormat().setTimeZone(TimeZone.getTimeZone("GMT"));
+        DATE_CELL_FRMT = new WritableCellFormat(df);
+    }
 
-	public void write() throws IOException, WriteException {
-		FileOutputStream file = new FileOutputStream("Asset_Allocation_report.xls");
-		WorkbookSettings wbSettings = new WorkbookSettings();
+    /** The times bold underline. */
+    private WritableCellFormat timesBoldUnderline;
 
-		wbSettings.setLocale(new Locale("en", "EN"));
+    /** The times. */
+    private WritableCellFormat times;
 
-		WritableWorkbook workbook = Workbook.createWorkbook(file, wbSettings);
-		workbook.createSheet("Report", 0);
-		WritableSheet excelSheet = workbook.getSheet(0);
-		createLabel(excelSheet);
-		createContent(excelSheet);
+    /**
+     * Adds the caption.
+     *
+     * @param sheet
+     *            the sheet
+     * @param column
+     *            the column
+     * @param row
+     *            the row
+     * @param s
+     *            the s
+     * @throws RowsExceededException
+     *             the rows exceeded exception
+     * @throws WriteException
+     *             the write exception
+     */
+    private void addCaption(WritableSheet sheet, int column, int row, String s)
+            throws RowsExceededException, WriteException {
+        Label label;
+        label = new Label(column, row, s, timesBoldUnderline);
+        sheet.addCell(label);
+    }
 
-		workbook.write();
-		workbook.close();
-		file.close();
-	}
+    /**
+     * Adds the date.
+     *
+     * @param sheet
+     *            the sheet
+     * @param column
+     *            the column
+     * @param row
+     *            the row
+     * @param date
+     *            the date
+     * @throws WriteException
+     *             the write exception
+     * @throws RowsExceededException
+     *             the rows exceeded exception
+     */
+    private void addDate(WritableSheet sheet, int column, int row, Date date)
+            throws WriteException, RowsExceededException {
+        DateTime dateTime;
+        dateTime = new DateTime(column, row, date, DATE_CELL_FRMT);
+        sheet.addCell(dateTime);
+    }
 
-	private void createLabel(WritableSheet sheet) throws WriteException {
-		// Lets create a times font
-		WritableFont times10pt = new WritableFont(WritableFont.TIMES, 10);
-		// Define the cell format
-		times = new WritableCellFormat(times10pt);
-		// Lets automatically wrap the cells
-		times.setWrap(true);
+    /**
+     * Adds the label.
+     *
+     * @param sheet
+     *            the sheet
+     * @param column
+     *            the column
+     * @param row
+     *            the row
+     * @param s
+     *            the s
+     * @throws WriteException
+     *             the write exception
+     * @throws RowsExceededException
+     *             the rows exceeded exception
+     */
+    private void addLabel(WritableSheet sheet, int column, int row, String s)
+            throws WriteException, RowsExceededException {
+        Label label;
+        label = new Label(column, row, s, times);
+        sheet.addCell(label);
+    }
 
-		// create create a bold font with unterlines
-		WritableFont times10ptBoldUnderline = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, false,
-				UnderlineStyle.SINGLE);
-		timesBoldUnderline = new WritableCellFormat(times10ptBoldUnderline);
-		// Lets automatically wrap the cells
-		timesBoldUnderline.setWrap(true);
+    /**
+     * Adds the number.
+     *
+     * @param sheet
+     *            the sheet
+     * @param column
+     *            the column
+     * @param row
+     *            the row
+     * @param value
+     *            the value
+     * @throws WriteException
+     *             the write exception
+     * @throws RowsExceededException
+     *             the rows exceeded exception
+     */
+    private void addNumber(WritableSheet sheet, int column, int row, Long value)
+            throws WriteException, RowsExceededException {
+        Number number;
+        number = new Number(column, row, value, times);
+        sheet.addCell(number);
+    }
 
-		CellView cv = new CellView();
-		cv.setFormat(times);
-		cv.setFormat(timesBoldUnderline);
-		cv.setAutosize(true);
+    /**
+     * Creates the content.
+     *
+     * @param sheet
+     *            the sheet
+     * @param asset
+     *            the asset
+     * @throws WriteException
+     *             the write exception
+     * @throws RowsExceededException
+     *             the rows exceeded exception
+     */
+    private void createContent(WritableSheet sheet, List<Asset> asset) throws WriteException, RowsExceededException {
+        for (int i = 0; i < asset.size(); i++) {
+            addLabel(sheet, 0, i + 1, asset.get(i).getAssetId());
+            addLabel(sheet, 1, i + 1, asset.get(i).getAssetType());
+            addNumber(sheet, 2, i + 1, asset.get(i).getUser().getEmpId());
+            addLabel(sheet, 3, i + 1,
+                    asset.get(i).getUser().getFirstName() + " " + asset.get(i).getUser().getLastName());
+            addDate(sheet, 4, i + 1, asset.get(i).getAllocatedOn());
+            if (asset.get(i).getReturnedOn() != null) {
+                addDate(sheet, 5, i + 1, asset.get(i).getReturnedOn());
+            }
 
-		// Write a few headers
-		addCaption(sheet, 0, 0, "Header 1");
-		addCaption(sheet, 1, 0, "This is another header");
+        }
 
-	}
+    }
 
-	private void createContent(WritableSheet sheet) throws WriteException, RowsExceededException {
-		// Write a few number
-		for (int i = 1; i < 10; i++) {
-			// First column
-			addNumber(sheet, 0, i, i + 10);
-			// Second column
-			addNumber(sheet, 1, i, i * i);
-		}
-		// Lets calculate the sum of it
-		StringBuffer buf = new StringBuffer();
-		buf.append("SUM(A2:A10)");
-		Formula f = new Formula(0, 10, buf.toString());
-		sheet.addCell(f);
-		buf = new StringBuffer();
-		buf.append("SUM(B2:B10)");
-		f = new Formula(1, 10, buf.toString());
-		sheet.addCell(f);
+    /**
+     * Creates the label.
+     *
+     * @param sheet
+     *            the sheet
+     * @throws WriteException
+     *             the write exception
+     */
+    private void createLabel(WritableSheet sheet) throws WriteException {
+        // Lets create a times font
+        WritableFont times10pt = new WritableFont(WritableFont.TIMES, 10);
+        // Define the cell format
+        times = new WritableCellFormat(times10pt);
+        // Lets automatically wrap the cells
+        times.setWrap(true);
 
-		// now a bit of text
-		for (int i = 12; i < 20; i++) {
-			// First column
-			addLabel(sheet, 0, i, "Boring text " + i);
-			// Second column
-			addLabel(sheet, 1, i, "Another text");
-		}
-	}
+        // create create a bold font with unterlines
+        WritableFont times10ptBoldUnderline = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, false,
+                UnderlineStyle.SINGLE);
+        timesBoldUnderline = new WritableCellFormat(times10ptBoldUnderline);
+        // Lets automatically wrap the cells
+        timesBoldUnderline.setWrap(true);
 
-	private void addCaption(WritableSheet sheet, int column, int row, String s)
-			throws RowsExceededException, WriteException {
-		Label label;
-		label = new Label(column, row, s, timesBoldUnderline);
-		sheet.addCell(label);
-	}
+        CellView cv = new CellView();
+        cv.setFormat(times);
+        cv.setFormat(timesBoldUnderline);
+        cv.setAutosize(true);
 
-	private void addNumber(WritableSheet sheet, int column, int row, Integer integer)
-			throws WriteException, RowsExceededException {
-		Number number;
-		number = new Number(column, row, integer, times);
-		sheet.addCell(number);
-	}
+        // Write a few headers
+        addCaption(sheet, 0, 0, "Asset Id");
+        addCaption(sheet, 1, 0, "Asset Type");
+        addCaption(sheet, 2, 0, "Allocated to Emp Id");
+        addCaption(sheet, 3, 0, "Allocated to Emp Name");
+        addCaption(sheet, 4, 0, "Allocated On");
+        addCaption(sheet, 5, 0, "Returned On");
+    }
 
-	private void addLabel(WritableSheet sheet, int column, int row, String s)
-			throws WriteException, RowsExceededException {
-		Label label;
-		label = new Label(column, row, s, times);
-		sheet.addCell(label);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * net.vivekkumar.spring.service.CreateReportService#createReport(java.util.
+     * List)
+     */
+    @Override
+    public void createReport(List<Asset> asset) throws IOException, WriteException {
+        FileOutputStream file = new FileOutputStream("Asset_Allocation_report.xls");
+        WorkbookSettings wbSettings = new WorkbookSettings();
 
+        wbSettings.setLocale(new Locale("en", "EN"));
+
+        WritableWorkbook workbook = Workbook.createWorkbook(file, wbSettings);
+        workbook.createSheet("Asset Allocation Report", 0);
+        WritableSheet excelSheet = workbook.getSheet(0);
+        createLabel(excelSheet);
+        createContent(excelSheet, asset);
+
+        workbook.write();
+        workbook.close();
+        file.close();
+    }
 }

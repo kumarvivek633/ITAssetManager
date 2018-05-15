@@ -1,18 +1,43 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.repositories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
 
 import net.vivekkumar.spring.model.User;
 
+/**
+ * The Interface UserRepository.
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	public User findByEmail(String email);
-	
-	public User findByEmailOrEmpId(String email, Long empId);
-	
-	public User findByEmpId(Long empId);
+    /**
+     * Find by email.
+     *
+     * @param email
+     *            the email
+     * @return the user
+     */
+    public User findByEmail(String email);
+
+    /**
+     * Find by email or emp id.
+     *
+     * @param email
+     *            the email
+     * @param empId
+     *            the emp id
+     * @return the user
+     */
+    public User findByEmailOrEmpId(String email, Long empId);
+
+    /**
+     * Find by emp id.
+     *
+     * @param empId
+     *            the emp id
+     * @return the user
+     */
+    public User findByEmpId(Long empId);
 }

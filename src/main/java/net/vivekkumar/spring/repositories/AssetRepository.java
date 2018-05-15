@@ -1,15 +1,23 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.repositories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
 
 import net.vivekkumar.spring.model.Asset;
-import net.vivekkumar.spring.model.User;
 
+/**
+ * The Interface AssetRepository.
+ */
 public interface AssetRepository extends JpaRepository<Asset, Long> {
 
-	public Asset findByAssetIdAndReturnedOnNull(String assetId);
+    /**
+     * Find by asset id and returned on null.
+     *
+     * @param assetId
+     *            the asset id
+     * @return the asset
+     */
+    public Asset findByAssetIdAndReturnedOnNull(String assetId);
 }

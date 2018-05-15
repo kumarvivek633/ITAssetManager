@@ -1,3 +1,6 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.config;
 
 import java.util.Properties;
@@ -18,6 +21,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+/**
+ * The Class AppConfig.
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "net.vivekkumar.spring")
@@ -26,54 +32,87 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableJpaRepositories("net.vivekkumar.spring.repositories")
 public class AppConfig {
 
-	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
-	private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
-	private static final String PROPERTY_NAME_DATABASE_URL = "db.url";
-	private static final String PROPERTY_NAME_DATABASE_USERNAME = "db.username";
+    /** The Constant PROPERTY_NAME_DATABASE_DRIVER. */
+    private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
 
-	private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
-	private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
-	private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+    /** The Constant PROPERTY_NAME_DATABASE_PASSWORD. */
+    private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
 
-	@Resource
-	private Environment env;
+    /** The Constant PROPERTY_NAME_DATABASE_URL. */
+    private static final String PROPERTY_NAME_DATABASE_URL = "db.url";
 
-	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    /** The Constant PROPERTY_NAME_DATABASE_USERNAME. */
+    private static final String PROPERTY_NAME_DATABASE_USERNAME = "db.username";
 
-		dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-		dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-		dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+    /** The Constant PROPERTY_NAME_HIBERNATE_DIALECT. */
+    private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
 
-		return dataSource;
-	}
+    /** The Constant PROPERTY_NAME_HIBERNATE_SHOW_SQL. */
+    private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
 
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactoryBean.setDataSource(dataSource());
-		entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistence.class);
-		entityManagerFactoryBean
-				.setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));
+    /** The Constant PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN. */
+    private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
 
-		entityManagerFactoryBean.setJpaProperties(hibProperties());
+    /** The env. */
+    @Resource
+    private Environment env;
 
-		return entityManagerFactoryBean;
-	}
+    /**
+     * Data source.
+     *
+     * @return the data source
+     */
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-	private Properties hibProperties() {
-		Properties properties = new Properties();
-		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
-		return properties;
-	}
+        dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
+        dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
+        dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
+        dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 
-	@Bean
-	public JpaTransactionManager transactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-		return transactionManager;
-	}
+        return dataSource;
+    }
+
+    /**
+     * Entity manager factory.
+     *
+     * @return the local container entity manager factory bean
+     */
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistence.class);
+        entityManagerFactoryBean
+                .setPackagesToScan(env.getRequiredProperty(PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN));
+
+        entityManagerFactoryBean.setJpaProperties(hibProperties());
+
+        return entityManagerFactoryBean;
+    }
+
+    /**
+     * Hib properties.
+     *
+     * @return the properties
+     */
+    private Properties hibProperties() {
+        Properties properties = new Properties();
+        properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
+        properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+        return properties;
+    }
+
+    /**
+     * Transaction manager.
+     *
+     * @return the jpa transaction manager
+     */
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
+    }
 }

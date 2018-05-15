@@ -1,112 +1,191 @@
+/*
+ *
+ */
 package net.vivekkumar.spring.model;
 
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+/**
+ * The Class Asset.
+ */
 @Entity
 @Table(name = "ASSET_ALLOCATION")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Asset extends ErrorMsg {
 
-	@Id @GeneratedValue
-	long id;
+    /** The id. */
+    @Id
+    @GeneratedValue
+    long id;
 
-	@Column(name = "ASSET_ID")
-	private String assetId;
+    /** The asset id. */
+    @Column(name = "ASSET_ID")
+    private String assetId;
 
-	@Column(name = "ASSET_TYPE")
-	private String assetType;
+    /** The asset type. */
+    @Column(name = "ASSET_TYPE")
+    private String assetType;
 
-	@Column(name = "ALLOCATED_ON")
-	private Date allocatedOn;
+    /** The allocated on. */
+    @Column(name = "ALLOCATED_ON")
+    private Date allocatedOn;
 
-	@Column(name = "RETURNED_ON")
-	private Date returnedOn;
+    /** The returned on. */
+    @Column(name = "RETURNED_ON")
+    private Date returnedOn;
 
-	@ManyToOne
-	@JoinColumn(name = "EMP_ID", nullable = false)
-	private User user;
+    /** The user. */
+    @ManyToOne
+    @JoinColumn(name = "EMP_ID", nullable = false)
+    private User user;
 
-	@Transient
-	private Long empId;
-	
-	public long getId() {
-		return id;
-	}
+    /** The emp id. */
+    @Transient
+    private Long empId;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    /**
+     * Gets the allocated on.
+     *
+     * @return the allocated on
+     */
+    public Date getAllocatedOn() {
+        return allocatedOn;
+    }
 
-	public String getAssetId() {
-		return assetId;
-	}
+    /**
+     * Gets the asset id.
+     *
+     * @return the asset id
+     */
+    public String getAssetId() {
+        return assetId;
+    }
 
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
-	}
+    /**
+     * Gets the asset type.
+     *
+     * @return the asset type
+     */
+    public String getAssetType() {
+        return assetType;
+    }
 
-	public String getAssetType() {
-		return assetType;
-	}
+    /**
+     * Gets the emp id.
+     *
+     * @return the emp id
+     */
+    public Long getEmpId() {
+        return empId;
+    }
 
-	public void setAssetType(String assetType) {
-		this.assetType = assetType;
-	}
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
 
-	public Date getAllocatedOn() {
-		return allocatedOn;
-	}
+    /**
+     * Gets the returned on.
+     *
+     * @return the returned on
+     */
+    public Date getReturnedOn() {
+        return returnedOn;
+    }
 
-	public void setAllocatedOn(Date allocatedOn) {
-		this.allocatedOn = allocatedOn;
-	}
+    /**
+     * Gets the user.
+     *
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
 
-	public Date getReturnedOn() {
-		return returnedOn;
-	}
+    /**
+     * Sets the allocated on.
+     *
+     * @param allocatedOn
+     *            the new allocated on
+     */
+    public void setAllocatedOn(Date allocatedOn) {
+        this.allocatedOn = allocatedOn;
+    }
 
-	public void setReturnedOn(Date returnedOn) {
-		this.returnedOn = returnedOn;
-	}
+    /**
+     * Sets the asset id.
+     *
+     * @param assetId
+     *            the new asset id
+     */
+    public void setAssetId(String assetId) {
+        this.assetId = assetId;
+    }
 
+    /**
+     * Sets the asset type.
+     *
+     * @param assetType
+     *            the new asset type
+     */
+    public void setAssetType(String assetType) {
+        this.assetType = assetType;
+    }
 
-	
-	public User getUser() {
-		return user;
-	}
+    /**
+     * Sets the emp id.
+     *
+     * @param empId
+     *            the new emp id
+     */
+    public void setEmpId(Long empId) {
+        this.empId = empId;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    /**
+     * Sets the id.
+     *
+     * @param id
+     *            the new id
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public Long getEmpId() {
-		return empId;
-	}
+    /**
+     * Sets the returned on.
+     *
+     * @param returnedOn
+     *            the new returned on
+     */
+    public void setReturnedOn(Date returnedOn) {
+        this.returnedOn = returnedOn;
+    }
 
-	public void setEmpId(Long empId) {
-		this.empId = empId;
-	}
+    /**
+     * Sets the user.
+     *
+     * @param user
+     *            the new user
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	
 }
